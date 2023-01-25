@@ -1,0 +1,266 @@
+basePath: /v1
+definitions:
+  models.AdminRes:
+    properties:
+      access_token:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      role:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.CreateAdminReq:
+    properties:
+      name:
+        type: string
+      password:
+        type: string
+      role:
+        type: string
+    type: object
+  models.DeleteAdminReq:
+    properties:
+      id:
+        type: integer
+    type: object
+  models.FailureInfo:
+    properties:
+      message:
+        type: string
+    type: object
+  models.ResponseError:
+    properties:
+      error: {}
+    type: object
+  models.SuccessInfo:
+    properties:
+      message:
+        type: string
+    type: object
+  models.UpdateAdminInfo:
+    properties:
+      id:
+        type: integer
+      new_name:
+        type: string
+      new_password:
+        type: string
+      new_role:
+        type: string
+      old_password:
+        type: string
+    type: object
+host: 13.229.54.192:8000
+info:
+  contact:
+    email: azizbekhojimurodov@gmail.com
+    name: Azizbek
+    url: https://t.me/azizbek_dev_2005
+  description: This is OPEN API that you get more information about universeties.
+  termsOfService: 2 term adds uz
+  title: Student API
+  version: "1.0"
+paths:
+  /:
+    get:
+      description: Ping pong
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SuccessInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.FailureInfo'
+      summary: Ping
+      tags:
+      - Ping
+  /admin:
+    delete:
+      consumes:
+      - application/json
+      description: Through this api admin can be deleted.
+      parameters:
+      - description: Admin
+        in: body
+        name: Admin
+        required: true
+        schema:
+          $ref: '#/definitions/models.DeleteAdminReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SuccessInfo'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/models.FailureInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+      security:
+      - BearerAuth: []
+      summary: Delete Admin
+      tags:
+      - Admin
+    post:
+      consumes:
+      - application/json
+      description: Through this api admin can be created only super admin can create
+        new admin.
+      parameters:
+      - description: Admin
+        in: body
+        name: Admin
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateAdminReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.AdminRes'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.FailureInfo'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/models.FailureInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.FailureInfo'
+      security:
+      - BearerAuth: []
+      summary: Create Admin
+      tags:
+      - Admin
+    put:
+      consumes:
+      - application/json
+      description: Through this api admin can be updated.
+      parameters:
+      - description: Admin
+        in: body
+        name: Admin
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateAdminInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SuccessInfo'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/models.FailureInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+      security:
+      - BearerAuth: []
+      summary: Admin Admin
+      tags:
+      - Admin
+  /admin/all:
+    get:
+      description: Through this api all admins can be taken
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.AdminRes'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/models.FailureInfo'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+      security:
+      - BearerAuth: []
+      summary: Get all admins profile
+      tags:
+      - Admin
+  /admin/login/{admin_name}/{password}:
+    get:
+      consumes:
+      - application/json
+      description: Through this api admin can login
+      parameters:
+      - description: admin_name
+        in: path
+        name: admin_name
+        required: true
+        type: string
+      - description: password
+        in: path
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.AdminRes'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ResponseError'
+      summary: Login admin
+      tags:
+      - Admin
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
